@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101c18" />
+    <meta
+      name="description"
+      content="Meet Golden Star FC, discover our values, and register to join the team."
+    />
+    <title>Golden Star FC | Built to shine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="Golden Star FC home">
+        <img class="brand-crest" src="assets/goldenstar.jpg" alt="" />
+        <span>GOLDEN <b>STAR</b><small>FOOTBALL CLUB</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-label="Open navigation">
+        <span></span><span></span>
+      </button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="#about">The club</a>
+        <a href="#values">Our values</a>
+        <a href="#register">Join the team</a>
+        <a class="nav-admin" href="#admin">Admin <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> ONE CLUB. ONE PURPOSE.</p>
+          <h1>Made for the<br /><em>moments</em> that matter.</h1>
+          <p class="hero-description">
+            More than a team. We’re a community that shows up, plays with heart,
+            and grows together—on and off the pitch.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-gold" href="#register">Become a player <span>↗</span></a>
+            <a class="text-link" href="#about">Discover our club <span>↓</span></a>
+          </div>
+          <div class="hero-note"><span class="note-star">✳</span> THE NEXT CHAPTER STARTS WITH YOU</div>
+        </div>
+        <div class="hero-art">
+          <div class="crest-frame">
+            <img class="hero-crest" src="assets/goldenstar.jpg" alt="Golden Star Football Club crest from New Bussa" />
+          </div>
+          <span class="art-caption">GOLDEN STAR FC<br />NEW BUSSA</span>
+          <span class="art-number">EST. / GSFC</span>
+        </div>
+        <div class="hero-bottom">
+          <span>ROOTED IN COMMUNITY</span><span>DRIVEN BY THE GAME</span><span>READY FOR WHAT’S NEXT</span>
+        </div>
+      </section>
+
+      <section class="intro section-wrap" id="about">
+        <div class="section-kicker">01 / THE CLUB</div>
+        <div class="intro-content">
+          <h2>Every great team<br />starts <span>with people.</span></h2>
+          <div>
+            <p>
+              Golden Star FC is built around the belief that football brings
+              people together. We’re here to create a place where players can
+              learn, compete, and belong—whatever their starting point.
+            </p>
+            <a class="text-link dark-link" href="#register">Find your place here <span>↗</span></a>
+          </div>
+        </div>
+        <div class="club-strip">
+          <div><strong>01</strong><span>ONE TEAM<br />ONE COMMUNITY</span></div>
+          <div><strong>✳</strong><span>ALL HEART<br />ALL GAME</span></div>
+          <div><strong>GS</strong><span>GOLDEN STAR<br />FOOTBALL CLUB</span></div>
+        </div>
+      </section>
+
+      <section class="values-section" id="values">
+        <div class="section-wrap values-wrap">
+          <div class="section-kicker">02 / WHAT WE STAND FOR</div>
+          <div class="values-heading">
+            <h2>Good football.<br /><span>Better people.</span></h2>
+            <p>Our badge means more when we live what it stands for.</p>
+          </div>
+          <div class="value-cards">
+            <article class="value-card">
+              <span class="value-index">01 — TOGETHER</span><span class="value-icon">↗</span>
+              <h3>Team<br />first.</h3>
+              <p>We make space for every voice, celebrate every effort, and win as one.</p>
+            </article>
+            <article class="value-card value-card-gold">
+              <span class="value-index">02 — ALWAYS</span><span class="value-icon">✳</span>
+              <h3>Keep<br />growing.</h3>
+              <p>Every session is a chance to learn something new and get a little better.</p>
+            </article>
+            <article class="value-card">
+              <span class="value-index">03 — EVERYWHERE</span><span class="value-icon">★</span>
+              <h3>Play with<br />respect.</h3>
+              <p>We bring respect to the pitch, to our opponents, and to our community.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="join-section section-wrap" id="register">
+        <div class="join-copy">
+          <div class="section-kicker">03 / YOUR NEXT MOVE</div>
+          <h2>There’s a place<br />for <span>you here.</span></h2>
+          <p>Ready to pull on the shirt? Tell us a little about yourself and our team will be in touch.</p>
+          <div class="join-aside"><span>✳</span> NEW PLAYERS<br />ALWAYS WELCOME</div>
+        </div>
+        <form class="registration-form" id="registration-form">
+          <div class="form-heading"><span>PLAYER REGISTRATION</span><span>01 — 04</span></div>
+          <label for="player-name">Your full name</label>
+          <input id="player-name" name="name" autocomplete="name" placeholder="e.g. Alex Morgan" required />
+          <div class="form-row">
+            <div>
+              <label for="player-email">Email address</label>
+              <input id="player-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+            </div>
+            <div>
+              <label for="player-phone">Phone number</label>
+              <input id="player-phone" name="phone" type="tel" autocomplete="tel" placeholder="+1 (555) 000-0000" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label for="player-position">Preferred position</label>
+              <select id="player-position" name="position" required>
+                <option value="" disabled selected>Select a position</option>
+                <option>Goalkeeper</option><option>Defender</option><option>Midfielder</option><option>Forward</option><option>Open to anything</option>
+              </select>
+            </div>
+            <div>
+              <label for="player-age">Age</label>
+              <input id="player-age" name="age" type="number" min="5" max="99" placeholder="Your age" required />
+            </div>
+          </div>
+          <label for="player-message">A little about you <span class="optional">(optional)</span></label>
+          <textarea id="player-message" name="message" rows="2" placeholder="Experience, goals, or anything else we should know"></textarea>
+          <button class="button button-gold submit-button" type="submit">Send registration <span>↗</span></button>
+          <p class="form-feedback" id="registration-feedback" role="status" aria-live="polite"></p>
+          <p class="privacy-note">Your details are used only for player registration.</p>
+        </form>
+      </section>
+
+      <section class="admin-section" id="admin">
+        <div class="admin-shell">
+          <div class="admin-intro">
+            <div class="section-kicker">04 / CLUB STAFF</div>
+            <h2>Behind the<br /><span>badge.</span></h2>
+            <p>Club administration, all in one place.</p>
+            <div class="admin-lock">✳ &nbsp; PRIVATE CLUB AREA</div>
+          </div>
+          <div class="admin-panel">
+            <form id="login-form" class="login-form">
+              <div class="form-heading"><span>ADMIN SIGN IN</span><span>GSFC / HQ</span></div>
+              <h3>Welcome back.</h3>
+              <p>Sign in to manage player registrations.</p>
+              <label for="admin-username">Username</label>
+              <input id="admin-username" name="username" autocomplete="username" placeholder="Enter your username" required />
+              <label for="admin-password">Password</label>
+              <input id="admin-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required />
+              <button class="button button-dark submit-button" type="submit">Sign in <span>↗</span></button>
+              <p class="form-feedback" id="login-feedback" role="status" aria-live="polite"></p>
+              <p class="privacy-note">Demo site: admin credentials are checked in your browser and are not secure for production use.</p>
+            </form>
+            <div class="admin-dashboard" id="admin-dashboard" hidden>
+              <div class="dashboard-heading">
+                <div><span class="form-heading">PLAYER DIRECTORY</span><h3>Registered players <span id="player-count">0</span></h3></div>
+                <button class="button button-outline" id="logout-button" type="button">Sign out <span>↗</span></button>
+              </div>
+              <p class="dashboard-help">Select a player to update their details. Changes are saved in this browser.</p>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>PLAYER</th><th>CONTACT</th><th>POSITION</th><th>AGE</th><th>ACTION</th></tr></thead>
+                  <tbody id="players-table"></tbody>
+                </table>
+              </div>
+              <p class="empty-state" id="empty-state">No players registered yet. New registrations will appear here.</p>
+              <form class="edit-form" id="edit-form" hidden>
+                <div class="edit-heading"><div><span class="form-heading">EDIT PLAYER</span><h4 id="edit-player-title">Player details</h4></div><button class="icon-button" id="cancel-edit" type="button" aria-label="Close editor">×</button></div>
+                <input type="hidden" name="id" />
+                <div class="form-row">
+                  <div><label for="edit-name">Full name</label><input id="edit-name" name="name" required /></div>
+                  <div><label for="edit-age">Age</label><input id="edit-age" name="age" type="number" min="5" max="99" required /></div>
+                </div>
+                <div class="form-row">
+                  <div><label for="edit-email">Email</label><input id="edit-email" name="email" type="email" required /></div>
+                  <div><label for="edit-phone">Phone</label><input id="edit-phone" name="phone" required /></div>
+                </div>
+                <label for="edit-position">Position</label>
+                <select id="edit-position" name="position" required>
+                  <option>Goalkeeper</option><option>Defender</option><option>Midfielder</option><option>Forward</option><option>Open to anything</option>
+                </select>
+                <label for="edit-message">Player note</label><textarea id="edit-message" name="message" rows="2"></textarea>
+                <div class="edit-actions"><button class="button button-gold" type="submit">Save changes <span>↗</span></button><button class="text-button" id="delete-player" type="button">Delete player</button></div>
+                <p class="form-feedback" id="edit-feedback" role="status" aria-live="polite"></p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand footer-brand" href="#home"><img class="brand-crest" src="assets/goldenstar.jpg" alt="" /><span>GOLDEN <b>STAR</b><small>FOOTBALL CLUB</small></span></a>
+      <p>Good football. Better people.</p>
+      <a href="#home" class="back-top">BACK TO TOP ↑</a>
+      <span class="copyright">© <span id="current-year"></span> GOLDEN STAR FC</span>
+    </footer>
+  </body>
+</html>
