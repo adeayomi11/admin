@@ -31,7 +31,7 @@
         <a href="#about">The club</a>
         <a href="#values">Our values</a>
         <a href="#register">Join the team</a>
-        <a class="nav-admin" href="#admin">Admin <span aria-hidden="true">↗</span></a>
+        <a class="nav-admin" href="admin.html">Admin <span aria-hidden="true">↗</span></a>
       </nav>
     </header>
 
@@ -151,63 +151,6 @@
         </form>
       </section>
 
-      <section class="admin-section" id="admin">
-        <div class="admin-shell">
-          <div class="admin-intro">
-            <div class="section-kicker">04 / CLUB STAFF</div>
-            <h2>Behind the<br /><span>badge.</span></h2>
-            <p>Club administration, all in one place.</p>
-            <div class="admin-lock">✳ &nbsp; PRIVATE CLUB AREA</div>
-          </div>
-          <div class="admin-panel">
-            <form id="login-form" class="login-form">
-              <div class="form-heading"><span>ADMIN SIGN IN</span><span>GSFC / HQ</span></div>
-              <h3>Welcome back.</h3>
-              <p>Sign in to manage player registrations.</p>
-              <label for="admin-username">Username</label>
-              <input id="admin-username" name="username" autocomplete="username" placeholder="Enter your username" required />
-              <label for="admin-password">Password</label>
-              <input id="admin-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required />
-              <button class="button button-dark submit-button" type="submit">Sign in <span>↗</span></button>
-              <p class="form-feedback" id="login-feedback" role="status" aria-live="polite"></p>
-              <p class="privacy-note">Demo site: admin credentials are checked in your browser and are not secure for production use.</p>
-            </form>
-            <div class="admin-dashboard" id="admin-dashboard" hidden>
-              <div class="dashboard-heading">
-                <div><span class="form-heading">PLAYER DIRECTORY</span><h3>Registered players <span id="player-count">0</span></h3></div>
-                <button class="button button-outline" id="logout-button" type="button">Sign out <span>↗</span></button>
-              </div>
-              <p class="dashboard-help">Select a player to update their details. Changes are saved in this browser.</p>
-              <div class="table-wrap">
-                <table>
-                  <thead><tr><th>PLAYER</th><th>CONTACT</th><th>POSITION</th><th>AGE</th><th>ACTION</th></tr></thead>
-                  <tbody id="players-table"></tbody>
-                </table>
-              </div>
-              <p class="empty-state" id="empty-state">No players registered yet. New registrations will appear here.</p>
-              <form class="edit-form" id="edit-form" hidden>
-                <div class="edit-heading"><div><span class="form-heading">EDIT PLAYER</span><h4 id="edit-player-title">Player details</h4></div><button class="icon-button" id="cancel-edit" type="button" aria-label="Close editor">×</button></div>
-                <input type="hidden" name="id" />
-                <div class="form-row">
-                  <div><label for="edit-name">Full name</label><input id="edit-name" name="name" required /></div>
-                  <div><label for="edit-age">Age</label><input id="edit-age" name="age" type="number" min="5" max="99" required /></div>
-                </div>
-                <div class="form-row">
-                  <div><label for="edit-email">Email</label><input id="edit-email" name="email" type="email" required /></div>
-                  <div><label for="edit-phone">Phone</label><input id="edit-phone" name="phone" required /></div>
-                </div>
-                <label for="edit-position">Position</label>
-                <select id="edit-position" name="position" required>
-                  <option>Goalkeeper</option><option>Defender</option><option>Midfielder</option><option>Forward</option><option>Open to anything</option>
-                </select>
-                <label for="edit-message">Player note</label><textarea id="edit-message" name="message" rows="2"></textarea>
-                <div class="edit-actions"><button class="button button-gold" type="submit">Save changes <span>↗</span></button><button class="text-button" id="delete-player" type="button">Delete player</button></div>
-                <p class="form-feedback" id="edit-feedback" role="status" aria-live="polite"></p>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">
