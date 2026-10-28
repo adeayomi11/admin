@@ -46,7 +46,7 @@
               <input id="admin-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required />
               <button class="button button-dark submit-button" type="submit">Sign in <span>↗</span></button>
               <p class="form-feedback" id="login-feedback" role="status" aria-live="polite"></p>
-              <p class="privacy-note">Demo site: admin credentials are checked in your browser and are not secure for production use.</p>
+              <p class="privacy-note">Admin sign-in is verified securely by the server. Configure your credentials in Vercel environment variables.</p>
             </form>
             <div class="admin-dashboard" id="admin-dashboard" hidden>
               <div class="dashboard-heading">
@@ -56,7 +56,7 @@
                   <button class="button button-outline" id="logout-button" type="button">Sign out <span>↗</span></button>
                 </div>
               </div>
-              <p class="dashboard-help">Select a player to update their details. Changes are saved in this browser.</p>
+              <p class="dashboard-help">Select a player to update their details. Changes are saved to the club database.</p>
               <p class="form-feedback" id="dashboard-feedback" role="status" aria-live="polite"></p>
               <div class="table-wrap">
                 <table>

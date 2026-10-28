@@ -1,7 +1,3 @@
-const STORAGE_KEY = "golden-star-fc-players";
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "Bellashmurda1@";
-
 const registrationForm = document.querySelector("#registration-form");
 const registrationFeedback = document.querySelector("#registration-feedback");
 const loginForm = document.querySelector("#login-form");
@@ -19,34 +15,17 @@ const siteNav = document.querySelector(".site-nav");
 const currentYear = document.querySelector("#current-year");
 if (currentYear) currentYear.textContent = new Date().getFullYear();
 
-function getPlayers() {
-  try {
-    const storedPlayers = localStorage.getItem(STORAGE_KEY);
-    if (!storedPlayers) return [];
-    const players = JSON.parse(storedPlayers);
-    if (!Array.isArray(players)) throw new Error("Stored player data is not a list.");
-    return players;
-  } catch (error) {
-    console.error("Could not read player registrations:", error);
-    throw error;
-  }
-}
-
-function savePlayers(players) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
-    return true;
-  } catch (error) {
-    console.error("Could not save player registrations:", error);
-    return false;
-  }
-}
-
-function createPlayerId() {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
-    return crypto.randomUUID();
-  }
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+async function apiRequest(path, options = {}) {
+  const response = await fetch(path, {
+    ...options,
+    headers: {
+      ...(options.body ? { "Content-Type": "application/json" } : {}),
+      ...options.headers,
+    },
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "The request could not be completed.");
+  return result;
 }
 
 function setFeedback(element, message, isError = false) {
@@ -55,38 +34,39 @@ function setFeedback(element, message, isError = false) {
   element.classList.toggle("error", isError);
 }
 
-function renderPlayers() {
-  let players;
+function setAdminView(isSignedIn) {
+  loginForm.hidden = isSignedIn;
+  dashboard.hidden = !isSignedIn;
+  if (!isSignedIn) editForm.hidden = true;
+}
+
+async function renderPlayers() {
   try {
-    players = getPlayers();
-  } catch {
-    setFeedback(dashboardFeedback, "Could not load player records. Your saved data has not been changed.", true);
-    return;
-  }
+    const { players } = await apiRequest("/api/players");
+    playersTable.replaceChildren();
+    playerCount.textContent = String(players.length);
+    emptyState.hidden = players.length > 0;
 
-  playersTable.replaceChildren();
-  playerCount.textContent = String(players.length);
-  emptyState.hidden = players.length > 0;
-
-  for (const player of players) {
-    const row = document.createElement("tr");
-    const nameCell = document.createElement("td");
-    nameCell.textContent = player.name;
-    const contactCell = document.createElement("td");
-    contactCell.textContent = player.email;
-    const positionCell = document.createElement("td");
-    positionCell.textContent = player.position;
-    const ageCell = document.createElement("td");
-    ageCell.textContent = player.age;
-    const actionCell = document.createElement("td");
-    const editButton = document.createElement("button");
-    editButton.className = "edit-button";
-    editButton.type = "button";
-    editButton.textContent = "Edit";
-    editButton.addEventListener("click", () => openEditor(player));
-    actionCell.append(editButton);
-    row.append(nameCell, contactCell, positionCell, ageCell, actionCell);
-    playersTable.append(row);
+    for (const player of players) {
+      const row = document.createElement("tr");
+      for (const value of [player.name, player.email, player.position, player.age]) {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.append(cell);
+      }
+      const actionCell = document.createElement("td");
+      const editButton = document.createElement("button");
+      editButton.className = "edit-button";
+      editButton.type = "button";
+      editButton.textContent = "Edit";
+      editButton.addEventListener("click", () => openEditor(player));
+      actionCell.append(editButton);
+      row.append(actionCell);
+      playersTable.append(row);
+    }
+    setFeedback(dashboardFeedback, "");
+  } catch (error) {
+    setFeedback(dashboardFeedback, `Could not load player records: ${error.message}`, true);
   }
 }
 
@@ -120,56 +100,69 @@ function startNewPlayer() {
   editForm.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
+function playerFromForm(form) {
+  const player = Object.fromEntries(new FormData(form).entries());
+  delete player.id;
+  player.age = Number(player.age);
+  return player;
+}
+
 if (registrationForm) {
-  registrationForm.addEventListener("submit", (event) => {
+  registrationForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const formData = new FormData(registrationForm);
-    const player = Object.fromEntries(formData.entries());
-    player.age = Number(player.age);
-    player.id = createPlayerId();
-    player.createdAt = new Date().toISOString();
-    let players;
+    const submitButton = registrationForm.querySelector('[type="submit"]');
+    submitButton.disabled = true;
+    setFeedback(registrationFeedback, "Submitting your registration…");
     try {
-      players = getPlayers();
-    } catch {
-      setFeedback(registrationFeedback, "We couldn’t read saved registrations, so your details were not saved. Please try again.", true);
-      return;
+      await apiRequest("/api/players", {
+        method: "POST",
+        body: JSON.stringify(playerFromForm(registrationForm)),
+      });
+      registrationForm.reset();
+      setFeedback(registrationFeedback, "Thanks for registering! Your details have been saved.");
+    } catch (error) {
+      setFeedback(registrationFeedback, `We couldn’t save your registration: ${error.message}`, true);
+    } finally {
+      submitButton.disabled = false;
     }
-
-    if (!savePlayers([...players, player])) {
-      setFeedback(registrationFeedback, "We couldn’t save your registration in this browser. Please try again.", true);
-      return;
-    }
-
-    registrationForm.reset();
-    setFeedback(registrationFeedback, "Thanks for registering! Your details have been saved.");
   });
 }
 
 if (loginForm) {
-  loginForm.addEventListener("submit", (event) => {
+  loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const submitButton = loginForm.querySelector('[type="submit"]');
     const formData = new FormData(loginForm);
-    const username = formData.get("username");
-    const password = formData.get("password");
-
-    if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
-      setFeedback(loginFeedback, "That username or password doesn’t match. Please try again.", true);
-      return;
+    submitButton.disabled = true;
+    setFeedback(loginFeedback, "Signing in…");
+    try {
+      await apiRequest("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          username: formData.get("username"),
+          password: formData.get("password"),
+        }),
+      });
+      setFeedback(loginFeedback, "");
+      setAdminView(true);
+      await renderPlayers();
+    } catch (error) {
+      setFeedback(loginFeedback, error.message, true);
+    } finally {
+      submitButton.disabled = false;
     }
-
-    setFeedback(loginFeedback, "");
-    loginForm.hidden = true;
-    dashboard.hidden = false;
-    renderPlayers();
   });
 
-  document.querySelector("#logout-button").addEventListener("click", () => {
-    dashboard.hidden = true;
-    loginForm.hidden = false;
-    loginForm.reset();
-    editForm.hidden = true;
-    setFeedback(loginFeedback, "");
+  document.querySelector("#logout-button").addEventListener("click", async () => {
+    try {
+      await apiRequest("/api/auth/logout", { method: "POST" });
+      setAdminView(false);
+      loginForm.reset();
+      setFeedback(loginFeedback, "");
+      setFeedback(dashboardFeedback, "");
+    } catch (error) {
+      setFeedback(dashboardFeedback, `Could not sign out: ${error.message}`, true);
+    }
   });
 
   document.querySelector("#new-player-button").addEventListener("click", startNewPlayer);
@@ -178,60 +171,53 @@ if (loginForm) {
     editForm.hidden = true;
   });
 
-  editForm.addEventListener("submit", (event) => {
+  editForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const formData = new FormData(editForm);
-    const id = formData.get("id");
-    const updatedPlayer = Object.fromEntries(formData.entries());
-    updatedPlayer.age = Number(updatedPlayer.age);
-    let players;
-    try {
-      players = getPlayers();
-    } catch {
-      setFeedback(editFeedback, "Could not read saved player records. Your changes were not saved.", true);
-      return;
-    }
-    const isNewPlayer = !id;
-    updatedPlayer.id = id || createPlayerId();
-    const playerExists = players.some((player) => player.id === id);
-
-    if (!isNewPlayer && !playerExists) {
-      setFeedback(editFeedback, "This player could not be found. Refresh the dashboard and try again.", true);
-      return;
-    }
-
-    if (isNewPlayer) updatedPlayer.createdAt = new Date().toISOString();
-    const updatedPlayers = isNewPlayer
-      ? [...players, updatedPlayer]
-      : players.map((player) => player.id === id ? { ...player, ...updatedPlayer } : player);
-
-    if (!savePlayers(updatedPlayers)) {
-      setFeedback(editFeedback, "We couldn’t save those changes. Please try again.", true);
-      return;
-    }
-
-    renderPlayers();
-    editForm.hidden = true;
-    setFeedback(dashboardFeedback, isNewPlayer ? "Player added and saved." : "Player changes saved.");
-  });
-
-  document.querySelector("#delete-player").addEventListener("click", () => {
+    const submitButton = document.querySelector("#save-player-button");
     const id = editForm.elements.id.value;
-    let players;
+    submitButton.disabled = true;
     try {
-      players = getPlayers().filter((player) => player.id !== id);
-    } catch {
-      setFeedback(editFeedback, "Could not read saved player records. This player was not deleted.", true);
-      return;
+      await apiRequest(id ? `/api/players/${encodeURIComponent(id)}` : "/api/players", {
+        method: id ? "PUT" : "POST",
+        body: JSON.stringify(playerFromForm(editForm)),
+      });
+      editForm.hidden = true;
+      await renderPlayers();
+      setFeedback(dashboardFeedback, id ? "Player changes saved." : "Player added.");
+    } catch (error) {
+      setFeedback(editFeedback, `Could not save player details: ${error.message}`, true);
+    } finally {
+      submitButton.disabled = false;
     }
-    if (!savePlayers(players)) {
-      setFeedback(editFeedback, "We couldn’t delete this player. Please try again.", true);
-      return;
-    }
-    editForm.hidden = true;
-    renderPlayers();
-    setFeedback(dashboardFeedback, "Player deleted.");
   });
+
+  document.querySelector("#delete-player").addEventListener("click", async () => {
+    const id = editForm.elements.id.value;
+    const deleteButton = document.querySelector("#delete-player");
+    deleteButton.disabled = true;
+    try {
+      await apiRequest(`/api/players/${encodeURIComponent(id)}`, { method: "DELETE" });
+      editForm.hidden = true;
+      await renderPlayers();
+      setFeedback(dashboardFeedback, "Player deleted.");
+    } catch (error) {
+      setFeedback(editFeedback, `Could not delete this player: ${error.message}`, true);
+    } finally {
+      deleteButton.disabled = false;
+    }
+  });
+
+  apiRequest("/api/auth/session")
+    .then(() => {
+      setAdminView(true);
+      return renderPlayers();
+    })
+    .catch((error) => {
+      setAdminView(false);
+      if (error.message !== "Not signed in.") {
+        setFeedback(loginFeedback, `Could not connect to the admin service: ${error.message}`, true);
+      }
+    });
 }
 
 if (menuToggle && siteNav) {

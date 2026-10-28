@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS players (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  position TEXT NOT NULL,
+  age INTEGER NOT NULL CHECK (age BETWEEN 5 AND 99),
+  message TEXT NOT NULL DEFAULT '',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
